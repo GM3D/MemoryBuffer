@@ -1,0 +1,30 @@
+#include "MemoryBuffer.h"
+
+namespace gm3d {
+  template <class T> MemoryBuffer<T>::
+  MemoryBuffer() dev_buf:NULL, host_buff:NULL, size:0,
+    host_valid: false, dev_valid: false, last_written: na
+  {
+  }
+
+  template <class T> MemoryBuffer<T>::
+  MemoryBuffer(size_t n, mem_space space)
+  {
+    if(space == host){
+      host_buf = new T[n];
+      dev_buf == NULL;
+      size = n;
+      host_valid = true;
+      dev_valid = false;
+      last_access = host;
+    }else if(space == device){
+      host_buff = NULL;
+      cudaMalloc(&dev_buf, n * sizeof(T));
+      size = n;
+      host_valid = false;
+      dev_valid = true;
+      last_access = device;
+    }
+  };
+
+};
