@@ -1,4 +1,4 @@
-COMMONFLAGS = -O1 -DDEBUG -g -Xlinker --demangle -I/usr/local/cuda/include
+COMMONFLAGS = -O0 -DDEBUG -g -Xlinker --demangle -I/usr/local/cuda/include
 CPPFLAGS =  $(INCLUDES)
 CXXFLAGS = -Wall $(COMMONFLAGS)
 CCFLAGS = -Wall $(COMMONFLAGS)

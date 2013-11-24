@@ -54,11 +54,12 @@ namespace gm3d{
 	    host_current = true;
 	  }else{
 	    /// neither of host or dev is current, this should not happen.
-	    throw std::domain_error();
+	    throw std::domain_error("memory space neither host nor device");
 	  }
 	} // end host_current
-	return host_buf;
-      } // end host memory space requested.
+      }
+      return host_buf;
+      // end host memory space requested.
     }else if(space == device){
       if(dev_buf == NULL){
 	check(cudaMalloc(&dev_buf, n * sizeof(T)));
@@ -79,13 +80,15 @@ namespace gm3d{
 	    dev_current = true;
 	  }else{
 	    /// neither of host or dev is current, this should not happen.
-	    throw std::domain_error();
+	    throw std::domain_error("neither of host or device is current");
 	  }
 	}// end dev_current
-      } // end device memory space requested.
+      }
+      return dev_buf;
+      // end device memory space requested.
     }else{
-      throw std::invalid_argument();
       /// memory space neither host or device requested.
+      throw std::invalid_argument("invalid memory space requested.");
     }
   }
 }
