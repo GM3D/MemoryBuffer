@@ -31,6 +31,9 @@ namespace gm3d{
   template <class T> T *MemoryBuffer<T>::
   addr(mem_space space, access_mode mode) throw(std::exception)
   {
+    assert(space == host || space == device);
+    assert(mode == read || mode == write);
+    assert(host_current || dev_current);
     if(space == host){
       /// host memory requested. allocate if it isn't.
       if(host_buf == NULL){
@@ -40,7 +43,7 @@ namespace gm3d{
 	/// write host. host becomes current unconditionally.
 	host_current = true;
 	dev_current = false;
-      }else{
+      }else if(mode == read){
 	/// read mode.
 	if(host_current){
 	  /// just make sure buf is allocated.
@@ -52,11 +55,10 @@ namespace gm3d{
 	    check(cudaMemcpy(host_buf, dev_buf, 
 			     n * sizeof(T), cudaMemcpyDeviceToHost));
 	    host_current = true;
-	  }else{
-	    /// neither of host or dev is current, this should not happen.
-	    throw std::domain_error("memory space neither host nor device");
 	  }
-	} // end host_current
+	}// end host_current
+      }else{
+	throw std::invalid_argument("invalid access mode requested.");
       }
       return host_buf;
       // end host memory space requested.
@@ -65,30 +67,30 @@ namespace gm3d{
 	check(cudaMalloc(&dev_buf, n * sizeof(T)));
       }
       if(mode == write){
+	/// device write
 	dev_current = true;
 	host_current = false;
-      }else{
-	/// read mode.
+      }else if(mode == read){
+	/// device read
 	if(dev_current){
-	  /// just make sure buf is allocated.
+	  /// just make sure buf is allocated before returning it.
 	  assert(dev_buf);
-	}else{
+	}else if(host_current){
 	  /// dev not current, check if host is current.
-	  if(host_current){
-	    check(cudaMemcpy(dev_buf, host_buf, n * sizeof(T), 
-			     cudaMemcpyHostToDevice));
-	    dev_current = true;
-	  }else{
-	    /// neither of host or dev is current, this should not happen.
-	    throw std::domain_error("neither of host or device is current");
-	  }
-	}// end dev_current
+	  check(cudaMemcpy(dev_buf, host_buf, n * sizeof(T), 
+			   cudaMemcpyHostToDevice));
+	  dev_current = true;
+	}else{
+	  /// this should never happen, even if arguments are invalid.
+	  throw std::domain_error("neither of host or device is current");
+	}
+      }else{
+	throw std::invalid_argument("invalid access mode requested.");
       }
       return dev_buf;
       // end device memory space requested.
     }else{
-      /// memory space neither host or device requested.
       throw std::invalid_argument("invalid memory space requested.");
     }
   }
-}
+};

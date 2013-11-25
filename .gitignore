@@ -34,3 +34,8 @@ log
 test[0-9][A-z]
 test[0-9]
 log
+
+# gcov (gcc coverage analisys tool) files
+*.gcov
+*.gcda
+*.gcno
