@@ -25,6 +25,7 @@ for t in signables + unsignables:
     if r:
         print "testMemoryBuffer exited abnormally for %s" % t
         exit()
+print "All tests passed without problem."
 
 
 
