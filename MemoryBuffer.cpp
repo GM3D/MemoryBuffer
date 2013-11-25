@@ -1,11 +1,5 @@
 namespace gm3d{
 
-  template <class T> MemoryBuffer<T>::MemoryBuffer()
-    : dev_buf(NULL), host_buf(NULL), n(0), 
-      host_current(false), dev_current(false)
-  {
-  }
-
   template <class T> MemoryBuffer<T>::MemoryBuffer(size_t n0, mem_space space)
     : dev_buf(NULL), host_buf(NULL), n(n0), 
       host_current(false), dev_current(false)

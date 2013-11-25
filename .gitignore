@@ -39,3 +39,6 @@ log
 *.gcov
 *.gcda
 *.gcno
+
+# the executable (for test)
+testMemoryBuffer

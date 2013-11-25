@@ -26,8 +26,7 @@ namespace gm3d {
   public:
     enum mem_space {host, device, na};
     enum access_mode {read, write};
-    MemoryBuffer();
-    MemoryBuffer(size_t n, mem_space space=host);
+    MemoryBuffer(size_t n = 0, mem_space space = host);
     ~MemoryBuffer();
     T *addr(mem_space space = host, access_mode mode = read)
       throw(std::exception);
