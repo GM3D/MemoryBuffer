@@ -1,8 +1,8 @@
 namespace gm3d{
 
   template <class T> MemoryBuffer<T>::MemoryBuffer(size_t n0, mem_space space)
-    : dev_buf(NULL), host_buf(NULL), n(n0), 
-      host_current(false), dev_current(false)
+    : n(n0), host_current(false), dev_current(false),
+      host_buf(NULL), dev_buf(NULL)
   {
     size_t size = n * sizeof(T);
     if(space == host){
@@ -16,10 +16,47 @@ namespace gm3d{
     }
   }
 
+  template <class T> MemoryBuffer<T>::MemoryBuffer(const MemoryBuffer<T> &m)
+    : n(m.n), host_current(m.host_current), dev_current(m.dev_current),
+      host_buf(NULL), dev_buf(NULL)
+  {
+    size_t size = n * sizeof(T);
+    if(host_current){
+      host_buf = new T[n];
+      memcpy(host_buf, m.host_buf, size);
+    }
+    if(dev_current){
+      check(cudaMalloc(&dev_buf, size));
+      check(cudaMemcpy(dev_buf, m.dev_buf, size, cudaMemcpyDeviceToDevice));
+    }
+  }
+
+  template <class T> MemoryBuffer<T>& MemoryBuffer<T>::
+  operator=(const MemoryBuffer<T> &m)
+  {
+    if(host_buf) delete[] host_buf;
+    if(dev_buf) check(cudaFree(dev_buf));
+    n = m.n;
+    host_current = m.host_current;
+    dev_current = m.dev_current;
+    host_buf = dev_buf = NULL;
+
+    size_t size = n * sizeof(T);
+    if(host_current){
+      host_buf = new T[n];
+      memcpy(host_buf, m.host_buf, size);
+    }
+    if(dev_current){
+      check(cudaMalloc(&dev_buf, size));
+      check(cudaMemcpy(dev_buf, m.dev_buf, size, cudaMemcpyDeviceToDevice));
+    }
+    return *this;
+  }
+
   template <class T> MemoryBuffer<T>::~MemoryBuffer()
   {
-    delete[] host_buf;
-    check(cudaFree(dev_buf));
+    if(host_buf) delete[] host_buf;
+    if(dev_buf) check(cudaFree(dev_buf));
   }
   
   template <class T> T *MemoryBuffer<T>::
