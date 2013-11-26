@@ -1,7 +1,7 @@
 COMMONFLAGS = -O0 -DNDEBUG -g -pg -Xlinker --demangle -I/usr/local/cuda/include
 CPPFLAGS =  $(INCLUDES)
-#CXXFLAGS = -Wall -fprofile-arcs -ftest-coverage $(COMMONFLAGS)
-CXXFLAGS = -Wall $(COMMONFLAGS)
+CXXFLAGS = -Wall -fprofile-arcs -ftest-coverage $(COMMONFLAGS)
+#CXXFLAGS = -Wall $(COMMONFLAGS)
 CCFLAGS = -Wall $(COMMONFLAGS)
 CC = g++
 NVCC = nvcc

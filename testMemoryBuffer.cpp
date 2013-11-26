@@ -29,9 +29,9 @@ TEST(Sanity)
   gm3d::MemoryBuffer<TYPE> mb0(n, s);
 
   for(int i = 0; i < 100; i++){
-    int space = rand() % 2;
+    int space = rand() % 3;
     int direction = rand() % 3;
-    int assignment = rand() % 3;
+    int assignment = rand() % 2;
     int copyctor = rand() %2;
     // int assignment = 1;
     // int copyctor = 1;
