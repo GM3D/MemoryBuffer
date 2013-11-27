@@ -3,6 +3,7 @@
 #include <vector>
 #include <ctime>
 #include <cstring>
+#include <cmath>
 #include "datatype.h"
 #include "MemoryBuffer.h"
 
