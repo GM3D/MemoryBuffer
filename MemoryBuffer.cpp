@@ -393,6 +393,3 @@ namespace gm3d{
 
 };
 
-
-
-

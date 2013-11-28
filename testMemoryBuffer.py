@@ -18,8 +18,8 @@ for t in signables + unsignables:
     f = open("datatype.h", "wt")
     f.write(macro % (t, t))
     f.close()
-    sleep(1)
-    r = call(["make", "clean"])
+    # sleep(1)
+    # r = call(["make", "clean"])
     sleep(1)
     r = call(["make"])
     if r:
